@@ -1,4 +1,4 @@
-namespace Backend.State;
+namespace Backend.State.Listing;
 public interface IListingRepository
 {
     IEnumerable<Backend.Model.Listing> GetAll();

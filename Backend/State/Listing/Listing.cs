@@ -1,4 +1,4 @@
-namespace Backend.State;
+namespace Backend.State.Listing;
 
 public class Listing
 {

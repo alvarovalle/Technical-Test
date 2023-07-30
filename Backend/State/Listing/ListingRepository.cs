@@ -1,6 +1,4 @@
-using Backend.Model;
-
-namespace Backend.State;
+namespace Backend.State.Listing;
 
 public class ListingRepository : IListingRepository, IDisposable
 {
