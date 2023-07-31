@@ -1,6 +1,6 @@
 namespace Backend.State.Listing;
 
-public class ListingRepository : IListingRepository, IDisposable
+public class ListingRepository : IListingRepository
 {
     private Context context { get; set; }
     private Listing Map(Model.Listing listing)
@@ -8,10 +8,12 @@ public class ListingRepository : IListingRepository, IDisposable
         var _postalAddress = new PostalAddress();
         if (listing.PostalAddress != null)
         {
+            _postalAddress.Id = listing.PostalAddress.Id;
             _postalAddress.City = listing.PostalAddress.City;
             _postalAddress.Country = listing.PostalAddress.Country;
             _postalAddress.Postal_code = listing.PostalAddress.Postal_code;
             _postalAddress.Street_address = listing.PostalAddress.Street_address;
+            _postalAddress.ListingId = listing.Id;
         }
         var _listing = new Listing(
             listing.Id,
@@ -34,6 +36,8 @@ public class ListingRepository : IListingRepository, IDisposable
         if (listing.PostalAddress != null)
         {
             _postalAddress = new Model.PostalAddress(
+            listing.PostalAddress.Id,
+            listing.PostalAddress.ListingId,
             listing.PostalAddress.City,
             listing.PostalAddress.Country,
             listing.PostalAddress.Postal_code,
@@ -103,25 +107,17 @@ public class ListingRepository : IListingRepository, IDisposable
 
     public bool Update(Model.Listing listing)
     {
-        throw new NotImplementedException();
-    }
-    private bool disposed = false;
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (!this.disposed)
+        try
         {
-            if (disposing)
-            {
-                context.Dispose();
-            }
+            var _listing = Map(listing);
+            context.Listing.Update(_listing);
+            context.SaveChanges();
+            return true;
         }
-        this.disposed = true;
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        catch (Exception ex)
+        {
+            Console.WriteLine($"ListingRepository.Update {ex.Message}");
+            return false;
+        }
     }
 }

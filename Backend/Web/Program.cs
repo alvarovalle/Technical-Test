@@ -8,7 +8,7 @@ builder.Services.AddScoped<IListingRepository, ListingRepository>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "all",
-                      policy  =>
+                      policy =>
                       {
                           policy.WithOrigins("*");
                       });
@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var connectionString = "Host=localhost;Port=5432;Pooling=true;Database=Backend;User Id=postgres;Password=LltF8Nx*yo;";
-builder.Services.AddDbContext<Context>((options)=>options.UseNpgsql(connectionString, x =>
+builder.Services.AddDbContext<Context>((options) => options.UseNpgsql(connectionString, x =>
                                                 {
                                                     x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10),
                                                                            new List<string>());
@@ -40,25 +40,38 @@ app.UseHttpsRedirection();
 
 app.MapGet("/listing", (IListingRepository repo) =>
 {
-   return repo.GetAll();
+    return repo.GetAll();
 })
 .WithOpenApi();
 
-app.MapPost("/listing", (IListingRepository repo, Backend.Model.Listing listing) =>
+app.MapPost("/listing", (HttpContext http, IListingRepository repo, Backend.Model.Listing listing) =>
 {
-   return repo.Create(listing);
+    if (repo.Create(listing))
+        return listing;
+    else
+    {
+        http.Response.StatusCode = 500;
+        return null;
+    }
 })
 .WithOpenApi();
 
-app.MapPut("/listing", (IListingRepository repo, Backend.Model.Listing listing) =>
+app.MapPut("/listing/{id}", (HttpContext http, IListingRepository repo, int id, Backend.Model.Listing listing) =>
 {
-   return repo.Update(listing);
+    listing.SetId(id);
+    if (repo.Update(listing))
+        return listing;
+    else
+    {
+        http.Response.StatusCode = 500;
+        return null;
+    }
 })
 .WithOpenApi();
 
-app.MapGet("/listing/{id}", (IListingRepository repo, int id) =>
+app.MapGet("/listing/{id}", (HttpContext http, IListingRepository repo, int id) =>
 {
-   return repo.GetListingPriceHistory(id);
+    return repo.GetListingPriceHistory(id);
 })
 .WithOpenApi();
 

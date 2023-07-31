@@ -28,6 +28,7 @@ public class Listing
         string contact_phone_number
      )
     {
+        Id = id;
         Created_date = created_date;
         Updated_date = updated_date;
         Name = name;
@@ -39,6 +40,10 @@ public class Listing
         Rooms_count = rooms_count;
         Bedrooms_count = bedrooms_count;
         Contact_phone_number = contact_phone_number;
+    }
+    public void SetId(int id)
+    {
+        Id = id;
     }
 }
 
