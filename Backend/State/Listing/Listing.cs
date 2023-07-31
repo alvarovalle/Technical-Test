@@ -17,7 +17,7 @@ public class Listing
         Bedrooms_count = bedrooms_count;
         Contact_phone_number = contact_phone_number;
     }
-
+    public Listing() { }
     public int Id { get; set; }
     public DateTime Created_date { get; set; }
     public DateTime Updated_date { get; set; }

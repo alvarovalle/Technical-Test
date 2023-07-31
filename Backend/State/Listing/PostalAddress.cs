@@ -8,5 +8,5 @@ public class PostalAddress
     public string City { get; set; }
     public string Country { get; set; }
     public int ListingId { get; set; }
-    
+    public PostalAddress() { }
 }

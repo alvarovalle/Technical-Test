@@ -15,7 +15,8 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-var connectionString = "";
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+var connectionString = "Host=localhost;Port=5432;Pooling=true;Database=Backend;User Id=postgres;Password=LltF8Nx*yo;";
 builder.Services.AddDbContext<Context>((options)=>options.UseNpgsql(connectionString, x =>
                                                 {
                                                     x.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10),
