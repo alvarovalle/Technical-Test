@@ -1,0 +1,13 @@
+li{
+    border-color: red;
+    border-width: 1px;
+}
+input-box{
+    display: block;
+}
+form{
+    padding: 20px;
+}
+label{
+    min-width: 300px;
+}
